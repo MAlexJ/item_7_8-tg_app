@@ -91,7 +91,7 @@ public class TelegramPublisher {
     if (deepLink != null) {
       InlineKeyboardMarkup keyboard =
           new InlineKeyboardMarkup(
-              new InlineKeyboardButton("⭐ Оценить фильм").url(deepLink));
+              new InlineKeyboardButton("⭐ Оцените фильм и получите бонус $").url(deepLink));
       request.replyMarkup(keyboard);
     }
     return request;

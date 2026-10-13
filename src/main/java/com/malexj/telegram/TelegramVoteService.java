@@ -126,7 +126,9 @@ public class TelegramVoteService {
 
   private void sendMainMenu(long chatId) {
     telegramBot.execute(
-        new SendMessage(chatId, "Привет! 👋 Я бот-кинорейтинг. Что хотите сделать?")
+        new SendMessage(
+                chatId,
+                "🎬 Привет! Оценивай фильмы и получай вознаграждение в Telegram Stars ⭐")
             .replyMarkup(persistentKeyboard()));
   }
 

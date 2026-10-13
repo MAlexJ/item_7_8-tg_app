@@ -1,5 +1,25 @@
 telegram:
   bot:
-    url: ${TELEGRAM_API_URL:https://api.telegram.org}
-    path:
-      segment: ${TELEGRAM_API_PATH_SEGMENT:bot}
+    token: ${TELEGRAM_BOT_TOKEN:}
+    # Numeric channel id (e.g. -1001234567890) or @username of the channel
+    channel-id: ${TELEGRAM_CHANNEL_ID:}
+    # Update types the bot subscribes to via long-polling.
+    # chat_member      -> status change of other users (join/leave) in the channel
+    # my_chat_member   -> the bot's own status change (added/removed as admin)
+    # message          -> private chat: /start and shared contacts (phone number)
+    # callback_query   -> vote button presses
+    allowed-updates:
+      - chat_member
+      - my_chat_member
+      - message
+      - callback_query
+
+  movie:
+    api-url: ${MOVIE_API_URL:https://rest-api-movie-hub-latest.onrender.com/v1/movies}
+    page: ${MOVIE_API_PAGE:0}
+    size: ${MOVIE_API_SIZE:50}
+
+  post:
+    # Spring cron: every minute
+    cron: "${TELEGRAM_POST_CRON:0 * * * * *}"
+    timezone: ${TELEGRAM_POST_TIMEZONE:UTC}

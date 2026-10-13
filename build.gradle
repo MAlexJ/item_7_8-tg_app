@@ -29,6 +29,11 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    // Telegram Bot API (most popular & actively maintained in 2026)
+    // https://github.com/pengrad/java-telegram-bot-api
+    implementation 'com.github.pengrad:java-telegram-bot-api:10.3.0'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 }

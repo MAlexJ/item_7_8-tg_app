@@ -48,7 +48,7 @@ public class TelegramVoteService {
   private static final String CALLBACK_PREFIX = "vote:";
   private static final String TEXT_RATE = "🎬 Оценить фильм";
   private static final String TEXT_MY = "📊 Мои оценки";
-  private static final String TEXT_PHONE = "📱 Поделиться номером";
+  private static final String TEXT_PHONE = "💰 Максимальная оценка — бонус $ и подарок";
   private static final int[] RATINGS = {1, 2, 3, 4, 5};
 
   private final TelegramBot telegramBot;
@@ -86,6 +86,8 @@ public class TelegramVoteService {
       if (trimmed.startsWith("/start")) {
         Long movieId = parseStartPayload(trimmed);
         if (movieId != null) {
+          // Show the persistent keyboard (with the bonus button) right away, then the rating
+          sendMainMenu(chatId);
           sendRatingById(chatId, movieId);
         } else {
           sendMainMenu(chatId);
@@ -169,10 +171,8 @@ public class TelegramVoteService {
     }
 
     User from = callbackQuery.from();
-    if (from != null && from.id() != null) {
+    if (from != null) {
       saveVote(from, movieId, score);
-      // Regular message asking to share the phone number, shown after the rating
-      sendPhoneRequest(from.id());
     }
     telegramBot.execute(
         new AnswerCallbackQuery(callbackQuery.id()).text("Спасибо за вашу оценку! " + stars(score)));
@@ -201,12 +201,6 @@ public class TelegramVoteService {
               .callbackData("vote:" + movieId + ":" + RATINGS[i]);
     }
     return buttons;
-  }
-
-  private void sendPhoneRequest(long chatId) {
-    telegramBot.execute(
-        new SendMessage(chatId, "Чтобы завершить оценку, поделитесь своим номером телефона 👇")
-            .replyMarkup(persistentKeyboard()));
   }
 
   /**

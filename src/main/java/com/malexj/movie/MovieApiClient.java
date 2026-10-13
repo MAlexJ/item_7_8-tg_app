@@ -47,4 +47,19 @@ public class MovieApiClient {
     }
     return Optional.of(movies.get(ThreadLocalRandom.current().nextInt(movies.size())));
   }
+
+  /** Fetches a single movie by id via {@code /v1/movies/{id}}. */
+  public Optional<MovieDto> fetchMovieById(Long id) {
+    if (id == null) {
+      return Optional.empty();
+    }
+    String url = properties.getMovie().getApiUrl() + "/" + id;
+    try {
+      MovieDto movie = restClient.get().uri(url).retrieve().body(MovieDto.class);
+      return Optional.ofNullable(movie);
+    } catch (Exception e) {
+      log.error("Failed to fetch movie {} from {}: {}", id, url, e.getMessage());
+      return Optional.empty();
+    }
+  }
 }

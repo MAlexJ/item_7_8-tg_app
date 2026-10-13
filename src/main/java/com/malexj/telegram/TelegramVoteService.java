@@ -88,7 +88,7 @@ public class TelegramVoteService {
         if (movieId != null) {
           // Show the persistent keyboard (with the bonus button) right away, then the rating
           sendMainMenu(chatId);
-          sendRatingById(chatId, movieId);
+          sendMovieById(chatId, movieId);
         } else {
           sendMainMenu(chatId);
         }
@@ -193,6 +193,17 @@ public class TelegramVoteService {
     telegramBot.execute(new SendMessage(chatId, text).replyMarkup(new InlineKeyboardMarkup(buttons)));
   }
 
+  private void sendMovieById(long chatId, Long movieId) {
+    Optional<MovieDto> movie = movieApiClient.fetchMovieById(movieId);
+    if (movie.isPresent()) {
+      // Full card: poster + caption + rating stars
+      sendMovieRating(chatId, movie.get());
+    } else {
+      // Fallback if the movie can't be fetched
+      sendRatingById(chatId, movieId);
+    }
+  }
+
   private InlineKeyboardButton[] ratingButtons(Long movieId) {
     InlineKeyboardButton[] buttons = new InlineKeyboardButton[RATINGS.length];
     for (int i = 0; i < RATINGS.length; i++) {
@@ -278,7 +289,7 @@ public class TelegramVoteService {
         from.username(),
         contact.phoneNumber());
     telegramBot.execute(
-        new SendMessage(userId.longValue(), "✅ Спасибо! Анкета завершена, ваш номер сохранён."));
+        new SendMessage(userId.longValue(), "🎁 Вы получите бонус $ в ближайшее время!"));
   }
 
   private void saveVote(User from, Long movieId, int score) {

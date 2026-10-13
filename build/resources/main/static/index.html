@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>NTSS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- WingCSS framework -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/wingcss/0.1.9/wing.min.css"/>
+    <link rel="stylesheet" href="/css/styles.css"/>
+
+    <!--  favicon  -->
+    <link rel="icon" href="/images/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/images/favicon.ico">
+
+    <!-- React 19 & ReactDOM 19 UMD builds -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Babel (for JSX in browser) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+
+<!-- Navbar always visible -->
+<nav class="navbar">
+    <div class="logo"><strong>Notification App</strong></div>
+    <div class="actions">
+        <button class="button" id="logout-button">Logout</button>
+    </div>
+</nav>
+
+<div class="container" style="margin-top: 3rem;">
+    <div id="root"></div>
+</div>
+
+<!-- Your JSX scripts -->
+<script type="text/babel" src="/js/components/SubscriptionTable.js"></script>
+<script type="text/babel" src="/js/components/Pagination.js"></script>
+<script type="text/babel" src="/js/components/EditForm.js"></script>
+<script type="text/babel" src="/js/app.js"></script>
+
+<!-- Logout must be a POST (CSRF protected); the XSRF-TOKEN cookie is echoed in the header -->
+<script>
+    document.getElementById("logout-button").addEventListener("click", function () {
+        fetch("/logout", {method: "POST", headers: {"X-XSRF-TOKEN": getCookie("XSRF-TOKEN")}})
+            .then(function () {
+                window.location.href = "/login?logout";
+            })
+            .catch(function () {
+                window.location.href = "/login";
+            });
+    });
+</script>
+
+</body>
+</html>

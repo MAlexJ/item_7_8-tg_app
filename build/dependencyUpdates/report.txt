@@ -1,0 +1,22 @@
+
+------------------------------------------------------------
+: Project Dependency Updates (report to plain text file)
+------------------------------------------------------------
+
+The following dependencies are using the latest milestone version:
+ - io.spring.dependency-management:io.spring.dependency-management.gradle.plugin:1.1.7
+
+The following dependencies have later milestone versions:
+ - com.github.ben-manes.versions:com.github.ben-manes.versions.gradle.plugin [0.62.0 -> 0.66.0]
+ - org.projectlombok:lombok [1.18.46 -> 1.18.48]
+     https://projectlombok.org
+     declared in the 'annotationProcessor' configuration
+ - org.springframework.boot:org.springframework.boot.gradle.plugin [4.1.1 -> 4.2.0-M2]
+     https://spring.io/projects/spring-boot
+ - org.springframework.boot:spring-boot-starter-data-mongodb [4.1.1 -> 4.2.0-M2]
+     https://spring.io/projects/spring-boot
+ - org.springframework.boot:spring-boot-starter-webmvc [4.1.1 -> 4.2.0-M2]
+     https://spring.io/projects/spring-boot
+
+Gradle release-candidate updates:
+ - Gradle: [9.8.0 -> 9.8.1]

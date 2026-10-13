@@ -1,0 +1,5 @@
+telegram:
+  bot:
+    url: ${TELEGRAM_API_URL:https://api.telegram.org}
+    path:
+      segment: ${TELEGRAM_API_PATH_SEGMENT:bot}

@@ -1,6 +1,7 @@
 package com.malexj.telegram;
 
 import com.malexj.model.SurveyVote;
+import com.malexj.model.TelegramChannelMember;
 import com.malexj.model.TelegramSurveyParticipant;
 import com.malexj.movie.MovieApiClient;
 import com.malexj.movie.MovieCaptionBuilder;
@@ -68,6 +69,10 @@ public class TelegramVoteService {
       return;
     }
 
+    // Save every user who interacts with the bot (deep link or a message) into the
+    // "channel members" table as well.
+    saveChannelMember(message.from());
+
     // User confirmed sharing their phone number
     if (message.contact() != null) {
       savePhoneNumber(message.from(), message.contact());
@@ -109,6 +114,9 @@ public class TelegramVoteService {
     if (callbackQuery == null || callbackQuery.data() == null) {
       return;
     }
+    // A button press is also an interaction with the bot -> record the user
+    saveChannelMember(callbackQuery.from());
+
     if (callbackQuery.data().startsWith(CALLBACK_PREFIX)) {
       onVote(callbackQuery);
     }
@@ -225,6 +233,24 @@ public class TelegramVoteService {
     } catch (Exception e) {
       log.debug("Failed to delete message {}: {}", messageId, e.getMessage());
     }
+  }
+
+  private void saveChannelMember(User user) {
+    if (user == null || user.id() == null) {
+      return;
+    }
+    String id = String.valueOf(user.id());
+    Instant now = Instant.now();
+
+    Query query = Query.query(Criteria.where("_id").is(id));
+    Update update =
+        new Update()
+            .set("lastUpdated", now)
+            .setOnInsert("firstSeen", now)
+            .setOnInsert("status", "member");
+    TelegramMemberMapper.mergeUser(update, user);
+
+    mongoTemplate.upsert(query, update, TelegramChannelMember.class);
   }
 
   private void savePhoneNumber(User from, Contact contact) {

@@ -20,3 +20,4 @@ spring:
     - optional:file:.env[.properties]
     - classpath:mongodb.yaml
     - classpath:telegram.yaml
+    - classpath:management.yaml

@@ -90,7 +90,7 @@ function MembersTable({rows}) {
     );
 }
 
-function SurveyTable({rows}) {
+function SurveyTable({rows, onDelete}) {
     return (
         <table className="table">
             <thead>
@@ -101,6 +101,7 @@ function SurveyTable({rows}) {
                 <th>Оценок</th>
                 <th>Premium</th>
                 <th>Анкета завершена</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -112,6 +113,9 @@ function SurveyTable({rows}) {
                     <td>{u.votes ? u.votes.length : 0}</td>
                     <td><PremiumBadge premium={u.isPremium}/></td>
                     <td className="nowrap">{formatDate(u.completedAt)}</td>
+                    <td className="nowrap">
+                        <button className="btn btn-danger" onClick={() => onDelete(u)}>Удалить</button>
+                    </td>
                 </tr>
             ))}
             </tbody>
@@ -170,6 +174,17 @@ function App() {
         setPage(0);
     };
 
+    const handleDelete = u => {
+        const name = displayName(u);
+        if (!window.confirm("Удалить «" + name + "» из статистики анкетирования?")) return;
+        fetch("/v1/survey/" + u.id, {method: "DELETE"})
+            .then(r => {
+                if (!r.ok) throw new Error("HTTP " + r.status);
+            })
+            .then(() => fetchData())
+            .catch(err => setError("Не удалось удалить запись: " + err.message));
+    };
+
     return (
         <div className="app">
             <header className="app-header">
@@ -192,7 +207,7 @@ function App() {
             <div className="panel">
                 {error && <div className="alert error">{error}</div>}
 
-                {tab === "members" ? <MembersTable rows={rows}/> : <SurveyTable rows={rows}/>}
+                {tab === "members" ? <MembersTable rows={rows}/> : <SurveyTable rows={rows} onDelete={handleDelete}/>}
 
                 {loading && <div className="loading">Загрузка…</div>}
                 {!loading && rows.length === 0 && !error && <div className="empty">Нет данных</div>}

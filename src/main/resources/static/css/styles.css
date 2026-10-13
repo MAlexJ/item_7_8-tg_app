@@ -243,3 +243,14 @@ body {
     opacity: 0.4;
     cursor: not-allowed;
 }
+
+.btn-danger {
+    border-color: #fca5a5;
+    color: #dc2626;
+}
+
+.btn-danger:hover:not(:disabled) {
+    border-color: #dc2626;
+    color: #dc2626;
+    background: #fef2f2;
+}

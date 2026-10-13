@@ -35,3 +35,6 @@ build/
 
 # Local Gradle home used inside the sandbox
 .gradle-home/
+
+.idea
+.gradle

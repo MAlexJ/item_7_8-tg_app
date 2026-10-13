@@ -36,7 +36,7 @@ public class TelegramProperties {
   @Getter
   @Setter
   public static class Post {
-    private String cron = "0 * * * * *";
+    private String cron = "0 */30 * * * *";
     private String timezone = "UTC";
   }
 }

@@ -20,6 +20,6 @@ telegram:
     size: ${MOVIE_API_SIZE:50}
 
   post:
-    # Spring cron: every minute
-    cron: "${TELEGRAM_POST_CRON:0 * * * * *}"
+    # Spring cron: every 30 minutes (override via TELEGRAM_POST_CRON)
+    cron: "${TELEGRAM_POST_CRON:0 */30 * * * *}"
     timezone: ${TELEGRAM_POST_TIMEZONE:UTC}
